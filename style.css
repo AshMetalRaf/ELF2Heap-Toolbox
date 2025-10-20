@@ -1,49 +1,157 @@
-body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    zoom: 0.90;
-    background: #181818;
-    color: #eef8e6;
-    line-height: 1.3;
+:root {
+    --bg: #121212;
+    --panel: #1e1e1e;
+    --muted: #c0c0c0;
+    --accent: #ffffff;
+    --card: #2a2a2a;
+    --ps2-bg: #181818;
+    --ps2-text: #eef8e6;
+    --ps2-card: #1F1F1F;
+    --ps2-heading: #cdcdcd;
+    --ps2-warning-bg: #2b1a1a;
+    --ps2-warning-border: #e05555;
+    --ps2-warning-text: #ffc4c4;
+    --ps2-accent-note: #E055E0;
 }
 
-h1 {
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    margin: 0;
+    background: var(--bg);
+    color: var(--muted);
+    padding: 20px;
+    min-height: 100vh;
+    line-height: 1.3;
+    zoom: 0.90;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--accent);
+}
+
+.tagline {
+    margin: 4px 0 18px;
+    color: #a0a0a0;
+    font-size: 0.95rem;
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tab {
+    background: var(--card);
+    color: var(--muted);
+    border: 1px solid #3a3a3a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tab.active {
+    background: var(--panel);
+    color: var(--accent);
+}
+
+.panel {
+    background: var(--panel);
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.hidden {
+    display: none;
+}
+
+label {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 6px;
+    color: #b0b0b0;
+}
+
+/* ------------------------------------------------------------------ */
+/* ps2 elf
+/* ------------------------------------------------------------------ */
+
+#ps2elf {
+    background: var(--ps2-bg);
+    color: var(--ps2-text);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+    border: none;
+    padding: 0;
+}
+
+#ps2elf h1 {
     margin-bottom: 10px;
     font-size: 20px;
-    color: #f0f6ff;
+    color: var(--ps2-heading);
 }
 
-h2 {
+#ps2elf h2 {
     margin-top: 10px;
     font-size: 16px;
-    color: #cdcdcd;
+    color: var(--ps2-heading);
 }
 
-p {
+#ps2elf p {
     margin: 8px 0 10px;
-    color: #cdcdcd;
+    color: var(--ps2-heading);
 }
 
-input[type="file"],
-textarea {
-    width: 100%;
+#ps2elf input[type="file"],
+#ps2elf textarea {
     padding: 8px 12px;
     border-radius: 8px;
-    border: 0;
-    background: #181818;
-    color: #cdcdcd;
+    border: 1px solid #3a3a3a;
+    background: var(--ps2-bg);
+    color: var(--ps2-heading);
     font-family: monospace;
     font-size: 14px;
     margin-bottom: 12px;
     box-sizing: border-box;
+    width: 100%;
 }
 
-button,
-.copy,
-.toggle {
+#ps2elf input[type="file"]::-webkit-file-upload-button {
     background: #2f2f2f;
-    color: #f0f6ff;
+    color: var(--ps2-heading);
+    border: 1px solid #555;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+#ps2elf input[type="file"]::file-selector-button {
+    background: #2f2f2f;
+    color: var(--ps2-heading);
+    border: 1px solid #555;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+#ps2elf .example-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    background: #2f2f2f;
+    color: var(--ps2-heading);
     border: 1px solid #555;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
@@ -51,26 +159,91 @@ button,
     font-weight: 500;
     transition: background 0.2s ease, transform 0.1s ease;
     margin-top: 12px;
+    margin-left: 12px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-button:hover,
-.copy:hover,
-.toggle:hover {
+#ps2elf .example-toggle:hover {
     background: #666666;
+    border-color: #555;
 }
 
-button {
+.example-content-wrapper,
+.explanation-content-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease, margin-top 0.4s ease;
+    padding: 0 12px;
+    margin-top: 0;
+}
+
+.example-content-wrapper.show,
+.explanation-content-wrapper.show {
+    padding: 12px;
+    margin-top: 12px;
+    max-height: 1000px;
+}
+
+.example-content,
+.explanation-content {
+    background: var(--ps2-bg);
+    border-left: 4px solid var(--ps2-accent-note);
+    border-radius: 6px;
+    padding: 12px 12px 12px 16px;
+    font-family: monospace;
+    font-size: 13px;
+    overflow-x: auto;
+    color: #c4c4c4;
+}
+
+.example-content pre,
+.explanation-content p {
+    background: #181818;
+    color: #e0e0e0;
+    padding: 12px;
+    border-radius: 6px;
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+.example-content pre code,
+.explanation-content pre code {
+    color: #C355C3;
+    font-weight: 500;
+}
+
+#ps2elf button,
+#ps2elf .copy,
+#ps2elf .toggle {
+    background: #2f2f2f;
+    color: var(--ps2-heading);
+    border: 1px solid #555;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s ease, transform 0.1s ease;
+    margin-top: 12px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
     padding: 10px 10px;
 }
 
-.copy {
+#ps2elf button:hover,
+#ps2elf .copy:hover,
+#ps2elf .toggle:hover {
+    background: #666666;
+    border-color: #555;
+}
+
+#ps2elf .copy {
     padding: 4px 6px;
     border-radius: 4px;
     font-size: 12px;
     margin-left: 6px;
 }
 
-.toggle {
+#ps2elf .toggle {
     padding: 10px 16px;
     font-size: 14px;
 }
@@ -83,48 +256,47 @@ button {
 }
 
 .card {
-    background: #1F1F1F;
-    padding: 13px 10px;
+    background: var(--ps2-card);
+    padding: 25px 20px;
     margin: 10px auto;
-    max-width: 1900px;
     width: 100%;
-    border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+    border-radius: 7px;
+    border: 1px solid #333;
 }
 
 .out {
-    background: #181818;
+    background: var(--ps2-bg);
     padding: 10px;
     border-radius: 10px;
     font-family: monospace;
     font-size: 13px;
     overflow-x: auto;
+    color: var(--ps2-heading);
 }
 
-.note {
-    background: #1B1B1B;
+#ps2elf .note {
+    background: #1b1b1b;
     border-left: 4px solid #555555;
     padding: 12px;
     border-radius: 8px;
     margin: 16px 0;
     font-family: monospace;
     font-size: 13px;
-    color: #E055E0;
+    color: var(--ps2-accent-note);
     overflow-x: auto;
 }
 
 .warning {
-    background: #2b1a1a;
-    border-left: 4px solid #e05555;
+    background: var(--ps2-warning-bg);
+    border-left: 4px solid var(--ps2-warning-border);
     padding: 12px;
     border-radius: 8px;
     margin: 12px 0;
-    color: #ffc4c4;
+    color: var(--ps2-warning-text);
     font-size: 14px;
 }
 
 code {
-    background: #181818;
     padding: 2px 4px;
     border-radius: 4px;
     font-family: monospace;
@@ -148,43 +320,11 @@ code {
     animation: fadeSlideIn 0.5s ease forwards;
 }
 
-.example-content-wrapper,
-.explanation-content-wrapper {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, padding 0.4s ease, margin-top 0.4s ease;
-    padding: 0 12px;
-    margin-top: 0;
-}
 
-.example-content-wrapper.show,
-.explanation-content-wrapper.show {
-    padding: 12px;
-    margin-top: 12px;
-    max-height: 1000px;
-}
 
-.example-content,
-.explanation-content {
-    background: #181818;
-    border-left: 4px solid #E055E0;
-    border-radius: 6px;
-    padding: 12px 12px 12px 16px;
-    font-family: monospace;
-    font-size: 13px;
-    overflow-x: auto;
-    color: #c4c4c4;
-}
-
-.example-content pre,
-.explanation-content p {
-    margin: 4px 0;
-}
-
-.example-content pre code,
-.explanation-content pre code {
-    color: #C355C3;
-    font-weight: 500;
+.header-line {
+    color: var(--ps2-heading);
+    font-weight: bold;
 }
 
 .steps-container {
@@ -215,7 +355,7 @@ code {
 .mips-container textarea {
     flex: 0 0 55%;
     min-width: 200px;
-    max-width: 210px;
+    max-width: 330px;
     height: 365px;
     resize: vertical;
 }
@@ -234,15 +374,10 @@ code {
 }
 
 .warning,
-.note,
+#ps2elf .note,
 .tip {
     width: 100%;
     box-sizing: border-box;
-}
-
-.header-line {
-    color: #cdcdcd;
-    font-weight: bold;
 }
 
 ::-webkit-scrollbar {
@@ -262,4 +397,192 @@ code {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+/* ------------------------------------------------------------------ */
+/* converter, ascii aligner and dump gen
+/* ------------------------------------------------------------------ */
+
+textarea,
+input[type="text"],
+input[type="number"],
+input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #3a3a3a;
+    background: #1a1a1a;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.note {
+    font-size: 0.85rem;
+    color: #bfc8ca;
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+
+.controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+button {
+    background-color: #1A1A1A;
+    color: #e2e2e2;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: monospace;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+button:hover,
+#endianSelect:hover {
+    border-color: #888;
+}
+
+#endianSelect {
+    background-color: #1A1A1A;
+    color: #e2e2e2;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: monospace;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+pre {
+    background: #1A1A1A;
+    color: #e0e0e0;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #3a3a3a;
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+footer {
+    margin-top: 12px;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+#mem h2,
+#converter h2,
+#align h2,
+#dump h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+#converter label,
+#align p,
+#dump p {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: #b0b0b0;
+}
+
+#converter textarea,
+#align textarea,
+#dump textarea,
+#dump input {
+    margin-top: 0;
+}
+
+#converter .controls,
+#align .controls,
+#dump .controls {
+    margin-top: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+#align textarea {
+    background: #1a1a1a;
+    color: var(--muted);
+}
+
+#alignOutput {
+    width: 100%;
+    height: auto;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #3a3a3a;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    font-family: monospace;
+    white-space: pre-wrap;
+    overflow: auto;
+}
+
+/* ------------------------------------------------------------------ */
+/* mem mapping
+/* ------------------------------------------------------------------ */
+
+#mem {
+    background: var(--panel);
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+#mem .console-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+#mem .console-buttons button {
+    background: var(--card);
+    color: var(--muted);
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: monospace;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+#mem .console-buttons button.active {
+    background: var(--panel);
+    color: var(--accent);
+    border-color: #dbdbdb;
+}
+
+#mem .console-buttons button:hover {
+    background: #333;
+    border-color: #888;
+}
+
+#mem pre#mappingDisplay {
+    background: var(--panel);
+    color: var(--muted);
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #3a3a3a;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    font-family: monospace;
+    margin-top: 8px;
+    font-size: 1.1rem;
 }

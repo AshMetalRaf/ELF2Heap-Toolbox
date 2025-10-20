@@ -1,2 +1,2 @@
-PS2 ELF debugging utility which calculates the dynamic memory (Heap) base address from PCSX2 debugger MIPS instructions
+PS2 ELF debugging utility that calculates the dynamic heap base from PCSX2 debugger MIPS instructions, with a small suite of additional developer tools.
 #### Project Link: [ELF2Heap](https://ashmetalraf.github.io/ELF2Heap/)

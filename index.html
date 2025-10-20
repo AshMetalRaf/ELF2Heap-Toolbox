@@ -1,97 +1,202 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>PS2 ELF → Dynamic Heap Base (PCSX2)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Toolbox | PS2 ELF Tools</title>
+    <link rel="stylesheet" href="style.css" />
     <link rel="icon" href="icon.png" type="image/png">
 </head>
 
 <body>
-    <div class="card steps-container">
-        <div class="step" id="step1">
-            <h1>PS2 ELF → Dynamic Heap Base (PCSX2)</h1>
-            <h2>Step 1: Load your PS2 ELF</h2>
-            <p>Drop your PS2 ELF (e.g., <code>SLUS_214.90</code>) below. The tool will automatically read the load
-                address and display it.</p>
-            <input id="file" type="file" accept="*/*">
 
-            <div id="elfStep2Header" style="display:none;">
-                <h2>Step 2: Copy the load address</h2>
-            </div>
-            <div id="elfResult" class="out" style="display:none"></div>
+    <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="ps2elf" role="tab" aria-selected="true">PS2 ELF Tool</button>
+        <button class="tab" data-tab="converter" role="tab" aria-selected="false">Converter</button>
+        <button class="tab" data-tab="align" role="tab" aria-selected="false">ASCII Aligner</button>
+        <button class="tab" data-tab="dump" role="tab" aria-selected="false">Dump Generator</button>
+        <button class="tab" data-tab="mem" role="tab" aria-selected="false">Memory Mapping</button>
+    </nav>
+
+    <main>
+        <!-- ps2 elf -->
+        <section id="ps2elf" class="panel" role="tabpanel">
+            <div class="card steps-container">
+                <div class="step" id="step1">
+                    <h1>PS2 ELF → Dynamic Heap Base (PCSX2)</h1>
+                    <h2>Step 1: Load your PS2 ELF</h2>
+                    <p>Drop your PS2 ELF (e.g., <code>SLUS_214.90</code>) below. The tool will automatically read the
+                        load
+                        address and display it.</p>
+                    <input id="file" type="file" accept="*/*">
+
+                    <div id="elfStep2Header" style="display:none;">
+                        <h2>Step 2: Copy the load address</h2>
+                    </div>
+                    <div id="elfResult" class="out" style="display:none"></div>
 
 
-            <div class="example-container">
-                <button class="example-toggle" style="display:none;">Show example instructions</button>
-                <div class="example-content-wrapper">
-                    <div class="example-content">
-                        <p>
-                            <strong>How to find the dynamic memory sequence in PCSX2 Debugger:</strong><br>
-                            1. Press <strong>G</strong> in the disassembly window.<br>
-                            2. Paste the ELF load address you got in Step 1.<br>
-                            3. Scroll down until you see the heap initialization sequence.<br>
-                            Copy the Instruction Text starting from the first <code>lui</code> up to the second
-                            <code>syscall ---</code> into the MIPS input.
-                        </p>
-                        <pre><code>
-<span class="header-line">Location Bytes     Instructions</span>
-00100198 3C040057  lui a0,0x0057
-0010019C 3C0501FE  lui a1,0x01FE
-001001A0 3C060002  lui a2,0x0002
-001001A4 3C070057  lui a3,0x0057
-001001A8 3C080010  lui t0,0x0010
-001001AC 24847170  addiu a0,a0,0x7170
-001001B0 24A50000  addiu a1,a1,0x0
-001001B4 24C60000  addiu a2,a2,0x0
-001001B8 24E7FA80  addiu a3,a3,-0x580
-001001BC 25080220  addiu t0,t0,0x220
-001001C0 0080E025  or gp,a0,zero
-001001C4 2403003C  addiu v1,zero,0x3C
-001001C8 0000000C  syscall --- 
-001001CC 0040E825  or sp,v0,zero
-001001D0 3C0400BF  lui a0,0x00BF
-001001D4 3C050000  lui a1,0x0000
-001001D8 24841E00  addiu a0,a0,0x1E00
-001001DC 24A5FFFF  addiu a1,a1,-0x1
-001001E0 2403003D  addiu v1,zero,0x3D
-001001E4 0000000C  syscall ---</code></pre>
+                    <div class="example-container">
+                        <button class="example-toggle" style="display:none;">Show example instructions</button>
+                        <div class="example-content-wrapper">
+                            <div class="example-content">
+                                <p>
+                                    <strong>How to find the dynamic memory sequence in PCSX2 Debugger:</strong><br>
+                                    1. Press <strong>G</strong> in the disassembly window.<br>
+                                    2. Paste the ELF load address you got in Step 1.<br>
+                                    3. Scroll down until you see the heap initialization sequence.<br>
+                                    Copy the Instruction Text starting from the first <code>lui</code> up to the second
+                                    <code>syscall ---</code> into the MIPS input.
+                                </p>
+                                <pre><code>
+<span class="header-line">Location Bytes     Instructions</span>
+00100198 3C040057  lui a0,0x0057
+0010019C 3C0501FE  lui a1,0x01FE
+001001A0 3C060002  lui a2,0x0002
+001001A4 3C070057  lui a3,0x0057
+001001A8 3C080010  lui t0,0x0010
+001001AC 24847170  addiu a0,a0,0x7170
+001001B0 24A50000  addiu a1,a1,0x0
+001001B4 24C60000  addiu a2,a2,0x0
+001001B8 24E7FA80  addiu a3,a3,-0x580
+001001BC 25080220  addiu t0,t0,0x220
+001001C0 0080E025  or gp,a0,zero
+001001C4 2403003C  addiu v1,zero,0x3C
+001001C8 0000000C  syscall --- 
+001001CC 0040E825  or sp,v0,zero
+001001D0 3C0400BF  lui a0,0x00BF
+001001D4 3C050000  lui a1,0x0000
+001001D8 24841E00  addiu a0,a0,0x1E00
+001001DC 24A5FFFF  addiu a1,a1,-0x1
+001001E0 2403003D  addiu v1,zero,0x3D
+001001E4 0000000C  syscall ---</code></pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="step" id="step3" style="display:none;">
-            <h2>Step 3: Paste MIPS instructions from PCSX2 debugger</h2>
-            <div class="warning">
-                <strong>Important:</strong> The site computes the dynamic memory base from the instructions you
-                paste. You must find the correct heap initialization sequence in PCSX2 yourself. Look for the code
-                near the ELF load address that ends with <code>syscall</code> and contains <code>lui a0</code> /
-                <code>addiu a0,a0</code>.<br>
-                ⚠️ Make sure to copy and paste the <strong>entire heap initialization block</strong> into the
-                MIPS input block below.
-            </div>
+                <div class="step" id="step3" style="display:none;">
+                    <h2>Step 3: Paste MIPS instructions from PCSX2 debugger</h2>
+                    <div class="warning">
+                        <strong>Important:</strong> The site computes the dynamic memory base from the instructions you
+                        paste. You must find the correct heap initialization sequence in PCSX2 yourself. Look for the
+                        code
+                        near the ELF load address that ends with <code>syscall</code> and contains <code>lui a0</code> /
+                        <code>addiu a0,a0</code>.<br>
+                        ⚠️ Make sure to copy and paste the <strong>entire heap initialization block</strong> into the
+                        MIPS input block below.
+                    </div>
 
-            <div class="mips-container">
-                <textarea id="mipsBlock" rows="20" placeholder="Paste the instruction block here"></textarea>
+                    <div class="mips-container">
+                        <textarea id="mipsBlock" rows="20" placeholder="Paste the instruction block here"></textarea>
 
-                <div class="explanation-wrapper">
-                    <div id="mipsResult" class="out" style="display:none"></div>
+                        <div class="explanation-wrapper">
+                            <div id="mipsResult" class="out" style="display:none"></div>
 
-                    <div class="explanation-container">
-                        <button class="explanation-toggle" style="display:none;">Show Memory Analysis</button>
-                        <div class="explanation-content-wrapper">
-                            <div class="explanation-content"></div>
+                            <div class="explanation-container">
+                                <button class="explanation-toggle" style="display:none;">Show Memory Analysis</button>
+                                <div class="explanation-content-wrapper">
+                                    <div class="explanation-content"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <script src="scripts.js"></script>
+        <!-- convreter -->
+        <section id="converter" class="panel hidden" role="tabpanel" aria-hidden="true">
+            <h2>String Converter</h2>
+            <label>Enter one name per line</label>
+            <textarea id="input" rows="8" placeholder=""></textarea>
+            <p class="note">Note: Only ASCII characters are supported. Each line will be converted to 32-bit words in
+                the selected endian format.</p>
+            <div class="controls">
+                <button id="copyBtn">Copy Output</button>
+                <button id="downloadBtn">Download Output</button>
+                <select id="endianSelect">
+                    <option value="big">Big Endian</option>
+                    <option value="little">Little Endian</option>
+                </select>
+            </div>
+            <h3>Output</h3>
+            <pre id="output" aria-live="polite"></pre>
+        </section>
+
+        <!-- ascii alinger -->
+        <section id="align" class="panel hidden" role="tabpanel" aria-hidden="true">
+            <h2>ASCII Aligner</h2>
+            <p style="font-size:0.9rem; color:#aaa;">
+                Paste your ASCII strings here. Lines will automatically align the <code>=</code> using Alt+255 spaces,
+                so the formatting works correctly in RA Code Notes.
+            </p>
+            <textarea id="alignInput" rows="8" placeholder=""></textarea>
+
+            <div class="controls">
+                <button id="copyAlignBtn">Copy Output</button>
+                <button id="downloadAlignBtn">Download Output</button>
+            </div>
+
+            <h3>Aligned Output</h3>
+            <textarea id="alignOutput" rows="8" readonly></textarea>
+        </section>
+
+        <!-- dump gen -->
+        <section id="dump" class="panel hidden" role="tabpanel" aria-hidden="true">
+            <h2>Dump Generator</h2>
+            <p style="font-size:0.9rem; color:#aaa; margin-bottom:12px;">
+                This tool is for <strong>local side code notes</strong>. Use it when you want to generate or update
+                multiple entries in the <code>12345-User.txt</code> section. Generated dump lines should be placed
+                <strong>below the game title</strong>. Each line will follow this format:
+                <em>N0:0xADDRESS:"TEXT"</em>. Example:
+            </p>
+            <pre style="background:#1A1A1A; color:#ccc; padding:8px; border-radius:6px; margin-bottom:12px;">
+1.4.0.0
+Game Title
+N0:0x005035c0:"[32-bit] Level 1"
+            </pre>
+
+            <div class="grid">
+                <div>
+                    <label>Start address (hex)</label>
+                    <input id="startAddr" placeholder="0x00001000" />
+                </div>
+                <div>
+                    <label>End address (hex)</label>
+                    <input id="endAddr" placeholder="0x00002000" />
+                </div>
+                <div>
+                    <label>Increment (hex)</label>
+                    <input id="increment" placeholder="0x0c" />
+                </div>
+                <div>
+                    <label>First counter</label>
+                    <input id="firstCounter" type="number" placeholder="1" min="0" />
+                </div>
+            </div>
+
+            <label>Text to insert (one per line) — will repeat if shorter than address count</label>
+            <textarea id="dumpText" rows="6" placeholder='[32-bit] Example'></textarea>
+
+            <div class="controls">
+                <button id="generateDumpBtn">Generate Dump</button>
+                <button id="copyDumpBtn">Copy Dump</button>
+                <button id="downloadDumpBtn">Download Dump</button>
+            </div>
+
+            <h3>Dump Output</h3>
+            <pre id="dumpOutput"></pre>
+        </section>
+
+        <!-- memory mapping -->
+        <section id="mem" class="panel hidden" role="tabpanel" aria-hidden="true">
+            <h2>Memory Mapping</h2>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 
 </html>
